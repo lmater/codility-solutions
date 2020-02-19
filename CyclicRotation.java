@@ -6,10 +6,9 @@ public class CyclicRotation {
 		if (A == null)
 			return null;
 		int n = A.length;
-		int k = K % n;
 		int[] Result = new int[n];
 		for (int i = 0; i < n; i++) {
-			Result[(i + k) % n] = A[i];
+			Result[(i + K) % n] = A[i];
 		}
 		return Result;
 	}
