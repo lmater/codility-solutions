@@ -69,10 +69,7 @@ public class NumberOfDiscIntersections {
 
 		@Override
 		public int compareTo(Disc o) {
-			if (this.getRight() != o.getRight())
-				return (int) (o.getRight() - this.getRight());
-			else
-				return (int) (this.getLeft() - o.getLeft());
+			return (int) (o.getRight() - this.getRight());
 		}
 	}
 }
