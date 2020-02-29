@@ -1,13 +1,13 @@
 package org.lmater;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class NumberOfDiscIntersections {
 
 	public int solution(int[] A) {
-
 		if (A.length <= 1)
 			return 0;
 
@@ -15,26 +15,29 @@ public class NumberOfDiscIntersections {
 		int exceeds = 10_000_000;
 		int count = 0;
 
-		List<Disc> list = new ArrayList<Disc>();
+		Disc[] list = new Disc[A.length];
 		List<Long> left = new ArrayList<Long>();
+		int p = 0;
 		for (int i = 0; i < A.length; i++) {
-			list.add(new Disc(Long.valueOf(i) - Long.valueOf(A[i]), Long.valueOf(i) + Long.valueOf(A[i])));
+			list[i] = new Disc(((long) i - (long) A[i]), ((long) i + (long) A[i]));
 			if (i >= A[i]) {
-				left.add(Long.valueOf(i) - Long.valueOf(A[i]));
+				left.add((long) i - (long) A[i]);
+				p++;
 			}
 		}
 
-		Collections.sort(list);
+		Arrays.sort(list);
 		Collections.sort(left, (o1, o2) -> {
 			return (int) (o2 - o1);
 		});
 
-		for (int i = 0; i < list.size(); i++) {
-			Long r = list.get(i).getRight();
-			while (!left.isEmpty() && r < left.get(0)) {
+		for (int i = 0, k = 0; i < list.length; i++) {
+			Long r = list[i].getRight();
+			while (k < p && r < left.get(k)) {
 				count--;
-				left.remove(0);
+				k++;
 			}
+
 			unorderedPairs += count;
 			count++;
 
@@ -64,7 +67,7 @@ public class NumberOfDiscIntersections {
 
 		@Override
 		public String toString() {
-			return getLeft() + " " + getRight();
+			return getLeft() + "," + getRight();
 		}
 
 		@Override
