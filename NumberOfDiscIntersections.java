@@ -10,29 +10,67 @@ public class NumberOfDiscIntersections {
 
 		int unorderedPairs = 0;
 		int exceeds = 10_000_000;
+		int openedDisks = 0;
 
-		long[][] list = new long[A.length][2];
+		Disc[] disks = new Disc[A.length];
+		long[] indexOfCloses = new long[A.length];
 		for (int i = 0; i < A.length; i++) {
-			list[i][0] = i - (long) A[i];
-			list[i][1] = i + (long) A[i];
+			disks[i] = new Disc(((long) i - (long) A[i]), ((long) i + (long) A[i]));
+			indexOfCloses[i] = i + (long) A[i];
 		}
-		Arrays.sort(list, (l1, l2) -> {
-			if (l1[1] > l2[1])
-				return -1;
-			return 1;
-		});
 
-		for (int i = 0; i < A.length - 1; i++) {
-			for (int j = i + 1; j < A.length; j++) {
-				if (list[i][0] <= list[j][1]) {
-					unorderedPairs++;
-					if (unorderedPairs > exceeds)
-						return -1;
-				} else
-					break;
+		Arrays.sort(disks);
+		Arrays.sort(indexOfCloses);
+
+		for (int i = 0, j = 0; i < A.length;) {
+			if (j < A.length && disks[i].openAfterClose(indexOfCloses[j])) {
+				openedDisks--;
+				j++;
+			} else {
+				unorderedPairs += openedDisks;
+				openedDisks++;
+				i++;
 			}
+			if (unorderedPairs > exceeds)
+				return -1;
 		}
 
 		return unorderedPairs;
+	}
+
+	class Disc implements Comparable<Disc> {
+		Long right;
+		Long left;
+
+		public Disc(Long left, Long right) {
+			this.right = right;
+			this.left = left;
+		}
+
+		public Long getRight() {
+			return right;
+		}
+
+		public Long getLeft() {
+			return left;
+		}
+
+		@Override
+		public String toString() {
+			return getLeft() + "," + getRight();
+		}
+
+		@Override
+		public int compareTo(Disc o) {
+			if (this.getLeft() < o.getLeft())
+				return -1;
+			else if (this.getLeft() > o.getLeft())
+				return 1;
+			return 0;
+		}
+
+		public boolean openAfterClose(long right) {
+			return (this.getLeft() > right);
+		}
 	}
 }
