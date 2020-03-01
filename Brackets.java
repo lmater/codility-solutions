@@ -6,30 +6,47 @@ import java.util.Deque;
 public class Brackets {
 
 	public int solution(String S) {
-				Deque<Character> queue = new ArrayDeque<Character>();
-		String bracket;
+
+		Deque<Character> deque = new ArrayDeque<Character>();
+
 		char[] array = S.toCharArray();
 		int n = array.length;
+
 		if (n % 2 != 0)
 			return 0;
 
-		if (array.length > 0)
-			if (array[n - 1] == '(' || array[n - 1] == '{' || array[n - 1] == '[') {
-				return 0;
-			}
 		for (int i = 0; i < n; i++) {
-			Character front = queue.peek();
-			bracket = ((front == null) ? "" + array[i] : front.toString() + "" + array[i]);
-			if (queue.size() > (n - i + 1) || bracket.equals(")") || bracket.equals("}") || bracket.equals("]")
-					|| bracket.equals("(}") || bracket.equals("(]") || bracket.equals("{]") || bracket.equals("[)")
-					|| bracket.equals("{)") || bracket.equals("[}"))
-				return 0;
-			else if (bracket.equals("()") || bracket.equals("{}") || bracket.equals("[]"))
-				queue.poll();
-			else {
-				queue.push(array[i]);
+
+			if (deque.size() > (n - i + 1))
+				return 2;
+
+			if (isOpened(array[i])) {
+				deque.push(array[i]);
+			} else {
+				if (deque.size() == 0)
+					return 0;
+				else if (isBracket(deque.peek(), array[i]))
+					deque.pop();
+				else
+					return 0;
 			}
 		}
 		return 1;
+	}
+
+	private boolean isOpened(char left) {
+		if (left == '[' || left == '(' || left == '{')
+			return true;
+		return false;
+	}
+
+	private boolean isBracket(char left, char right) {
+		if (left == '[' && right == ']')
+			return true;
+		else if (left == '(' && right == ')')
+			return true;
+		else if (left == '{' && right == '}')
+			return true;
+		return false;
 	}
 }
