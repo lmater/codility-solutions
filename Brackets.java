@@ -12,18 +12,20 @@ public class Brackets {
 		char[] array = S.toCharArray();
 		int n = array.length;
 
-		if (n % 2 != 0)
+		if (n % 2 != 0 || (n > 0 && isOpened(array[n - 1])))
 			return 0;
 
 		for (int i = 0; i < n; i++) {
 
-			if (deque.size() > (n - i + 1))
-				return 2;
+			int sizeDeque = deque.size();
+
+			if (sizeDeque > (n - i + 1))
+				return 0;
 
 			if (isOpened(array[i])) {
 				deque.push(array[i]);
 			} else {
-				if (deque.size() == 0)
+				if (sizeDeque == 0)
 					return 0;
 				else if (isBracket(deque.peek(), array[i]))
 					deque.pop();
