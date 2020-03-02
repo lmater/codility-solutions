@@ -1,34 +1,33 @@
 package org.lmater;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Stack;
 
 public class Brackets {
 
 	public int solution(String S) {
 
-		Deque<Character> deque = new ArrayDeque<Character>();
-
 		char[] array = S.toCharArray();
 		int n = array.length;
+
+		Stack<Character> stack = new Stack<Character>();
 
 		if (n % 2 != 0 || (n > 0 && isOpenedBracket(array[n - 1])))
 			return 0;
 
 		for (int i = 0; i < n; i++) {
 
-			int m = deque.size();
+			int m = stack.size();
 
 			if (m > (n - i + 1))
 				return 0;
 
 			if (isOpenedBracket(array[i])) {
-				deque.push(array[i]);
+				stack.push(array[i]);
 			} else {
 				if (m == 0)
 					return 0;
-				else if (isOpenedClosedBracket(deque.peek(), array[i]))
-					deque.pop();
+				else if (isOpenedClosedBracket(stack.peek(), array[i]))
+					stack.pop();
 				else
 					return 0;
 			}
