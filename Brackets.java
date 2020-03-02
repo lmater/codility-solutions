@@ -12,22 +12,22 @@ public class Brackets {
 		char[] array = S.toCharArray();
 		int n = array.length;
 
-		if (n % 2 != 0 || (n > 0 && isOpened(array[n - 1])))
+		if (n % 2 != 0 || (n > 0 && isOpenedBracket(array[n - 1])))
 			return 0;
 
 		for (int i = 0; i < n; i++) {
 
-			int sizeDeque = deque.size();
+			int m = deque.size();
 
-			if (sizeDeque > (n - i + 1))
+			if (m > (n - i + 1))
 				return 0;
 
-			if (isOpened(array[i])) {
+			if (isOpenedBracket(array[i])) {
 				deque.push(array[i]);
 			} else {
-				if (sizeDeque == 0)
+				if (m == 0)
 					return 0;
-				else if (isBracket(deque.peek(), array[i]))
+				else if (isOpenedClosedBracket(deque.peek(), array[i]))
 					deque.pop();
 				else
 					return 0;
@@ -36,13 +36,13 @@ public class Brackets {
 		return 1;
 	}
 
-	private boolean isOpened(char left) {
+	private boolean isOpenedBracket(char left) {
 		if (left == '[' || left == '(' || left == '{')
 			return true;
 		return false;
 	}
 
-	private boolean isBracket(char left, char right) {
+	private boolean isOpenedClosedBracket(char left, char right) {
 		if (left == '[' && right == ']')
 			return true;
 		else if (left == '(' && right == ')')
