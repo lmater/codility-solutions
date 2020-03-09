@@ -16,13 +16,14 @@ public class StoneWall {
 				minimumBlocks++;
 				stack.push(H[i]);
 			} else if (!stack.empty() && H[i] < stack.peek()) {
-				minimumBlocks++;
 				while (!stack.empty() && H[i] < stack.peek())
 					stack.pop();
 				if (!stack.empty() && H[i] == stack.peek())
-					minimumBlocks--;
-				else
+					continue;
+				else {
+					minimumBlocks++;
 					stack.push(H[i]);
+				}
 			}
 		}
 
