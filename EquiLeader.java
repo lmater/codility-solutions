@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EquiLeader {
+	
 	public int solution(int[] A) {
 
 		int n = A.length;
@@ -18,9 +19,6 @@ public class EquiLeader {
 				downStock.put(A[i], 1);
 			}
 		}
-//		System.out.println(downStock);
-//		System.out.println();
-
 		int index = -1;
 		int CountLeader = 0;
 
@@ -46,13 +44,6 @@ public class EquiLeader {
 					number++;
 				}
 			}
-
-//			System.out.println("downStock.get(A[index]) " + downStock.get(A[index]));
-//
-			System.out.println(upStock + " , " + downStock + " , index=" + index + " , A[index]=" + A[index]
-					+ " , ((n - s - 1)) / 2)=" + (n - s - 1) / 2);
-//			System.out.println();
-
 		}
 		return number;
 	}
