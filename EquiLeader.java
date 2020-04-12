@@ -2,49 +2,47 @@ package org.lmater;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class EquiLeader {
-	
+
 	public int solution(int[] A) {
+			    Stack stack = new Stack();
+			   
+			    for(int i=0; i<A.length; i++) {
+			      if(stack.isEmpty()) {
+			        stack.push(A[i]);
+			      }
+			      else {
+			        if(stack.peek().intValue() == A[i]) {
+			          stack.push(A[i]);
+			        }
+			        else {
+			          stack.pop();
+			        }
+			      }
+			    }
+			    //no equi leaders if stack is empty
+			    if(stack.isEmpty()) return 0;
+			    int candidate = stack.peek().intValue();
+			    int dominatorCount = 0;
 
-		int n = A.length;
-		Map<Integer, Integer> upStock = new HashMap<Integer, Integer>();
-		Map<Integer, Integer> downStock = new HashMap<Integer, Integer>();
-		int number = 0;
-		for (int i = 0; i < A.length; i++) {
-			if (downStock.containsKey(A[i])) {
-				int count = 1 + downStock.get(A[i]);
-				downStock.put(A[i], count);
-			} else {
-				downStock.put(A[i], 1);
-			}
-		}
-		int index = -1;
-		int CountLeader = 0;
-
-		for (int s = 0; s < (A.length - 1); s++) {
-
-			int countUp = 1;
-			if (upStock.containsKey(A[s])) {
-				countUp = 1+upStock.get(A[s]);
-				upStock.put(A[s], countUp);
-			} else {
-				upStock.put(A[s], 1);
-			}
-
-			if (CountLeader < countUp) {
-				CountLeader = countUp;
-				index = s;
-			}
-
-			int countDown = downStock.get(A[s]);
-			if (downStock.containsKey(A[s])) {
-				downStock.put(A[s], countDown - 1);
-				if (CountLeader > ((s + 1) / 2) && downStock.get(A[index]) > ((n - s - 1) / 2)) {
-					number++;
-				}
-			}
-		}
-		return number;
+			    Map<Integer, Integer> dominatorMap = new HashMap<Integer, Integer>();
+			    for(int i=0; i<A.length; i++) { if(A[i] == candidate) { dominatorCount++; dominatorMap.put(i, dominatorCount); } } //works for even and odd number of A elements //e.g. if A.length = 4, count needs to be > 2
+			    //e.g. if A.length = 5, count needs to be > 2
+			    int equiLeaders = 0;
+			    if(dominatorCount > (A.length / 2)) {
+			      //find all equi leader sequences
+			     
+			      int lastCandidateOccurenceIndex = 0;
+			      int runningDominatorCount = 0;
+			      for(int i=0; i<A.length-1; i++) { if(A[i] == candidate) { lastCandidateOccurenceIndex = i; runningDominatorCount = dominatorMap.get(i).intValue(); } else if(dominatorMap.get(lastCandidateOccurenceIndex) != null) { runningDominatorCount = dominatorMap.get(lastCandidateOccurenceIndex).intValue(); } if(runningDominatorCount > (i+1)/2) {
+			          if((dominatorCount - runningDominatorCount) > (A.length - (i+1))/2 ) {
+			            equiLeaders++;
+			          }
+			        }
+			      }
+			    }
+			    return equiLeaders;
 	}
 }
